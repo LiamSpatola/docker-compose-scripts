@@ -1,0 +1,11 @@
+version: '3.9' # Using version 3.9
+services:
+  db:
+    image: mongodb/mongodb-community-server:latest # Using the mongodb community edition image
+    ports: 
+      - 27017:27017 # Exposing port 27017 so that mongodb can be accessed outside
+    restart: unless-stopped # Setting the restart policy so that the container always restarts unless stopped
+    networks: 
+      - dbnet # Connecting the container to the dbnet network
+networks:
+  dbnet:
