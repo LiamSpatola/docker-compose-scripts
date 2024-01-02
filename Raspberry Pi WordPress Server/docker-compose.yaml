@@ -1,0 +1,36 @@
+version : '3.9' # Using version 3.9
+
+services:
+  mysqldb:
+    image: mysql # Using the mysql image
+    environment:
+      MYSQL_ROOT_PASSWORD: root 
+      MYSQL_DATABASE: wordpressdb # Name of wordpress database
+      MYSQL_USER: wordpressuser # Superuser for the wordpress database
+      MYSQL_PASSWORD: wordpress # Password for the superuser
+    restart: unless-stopped # Setting the restart policy so that the container always restarts unless stopped
+    volumes:
+      - mysqldb_data:/var/lib/mysql # Creating a volume named 'mysqldb_data' to protect the data generated at '/var/lib/mysql'
+    networks:
+      - wpnet # Connecting the container to the wpnet network
+  wordpress: 
+    image: wordpress # Using the wordpress image
+    restart: unless-stopped # Setting the restart policy so that the container always restarts unless stopped
+    depends_on:
+      - mysqldb # Ensuring that the wordpress container is created after the mysql container
+    ports: 
+      - 3080:80    # Exposing port 80 so that mongodb can be accessed outside via port 3080
+    environment:
+      WORDPRESS_DB_HOST: mysqldb # Setting the database host
+      WORDPRESS_DB_NAME: wordpressdb # Settign the wordpress database
+      WORDPRESS_DB_USER: wordpressuser # Setting the superuser for the wordpress database
+      WORDPRESS_DB_PASSWORD: wordpress # Setting the password for the superuser
+    volumes:
+      - wordpress_data:/var/www/html # Creating a volume named 'wordpress_data' to protect the data generated at '/var/www/html'
+    networks:
+      - wpnet # Connecting the container to the wpnet network
+volumes:
+  mysqldb_data:
+  wordpress_data:
+networks:
+  wpnet:
