@@ -19,7 +19,7 @@ services:
     depends_on:
       - mysqldb # Ensuring that the wordpress container is created after the mysql container
     ports: 
-      - 3080:80    # Exposing port 80 so that mongodb can be accessed outside via port 3080
+      - 3080:80    # Exposing port 80 so that wordpress can be accessed outside via port 3080
     environment:
       WORDPRESS_DB_HOST: mysqldb # Setting the database host
       WORDPRESS_DB_NAME: wordpressdb # Settign the wordpress database
